@@ -18,14 +18,14 @@ export async function initDiscordRpc() {
 
     rpc.on("ready", () =>
       rpc.setActivity({
-        state: "stoat.chat",
+        state: "chat.setoka.net",
         details: t("discord.details"),
         largeImageKey: "qr",
         largeImageText: t("discord.join"),
         buttons: [
           {
             label: t("discord.join_button"),
-            url: "https://stoat.chat/",
+            url: "https://chat.setoka.net/",
           },
         ],
       }),
