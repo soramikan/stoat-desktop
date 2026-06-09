@@ -2,6 +2,8 @@ import dbus from "@homebridge/dbus-native";
 
 import { NativeImage, app, ipcMain, nativeImage } from "electron";
 
+import { notificationCountLabel, t } from "../../strings";
+
 import { mainWindow } from "./window";
 
 // internal state
@@ -13,7 +15,7 @@ export async function setBadgeCount(count: number) {
     case "win32":
     case "linux":
       if (count === 0) {
-        mainWindow.setOverlayIcon(null, "No Notifications");
+        mainWindow.setOverlayIcon(null, t("notifications.none"));
         break;
       }
 
@@ -26,7 +28,7 @@ export async function setBadgeCount(count: number) {
 
       mainWindow.setOverlayIcon(
         nativeIcons[count],
-        count === -1 ? `Unread Messages` : `${count} Notifications`,
+        notificationCountLabel(count),
       );
 
       break;

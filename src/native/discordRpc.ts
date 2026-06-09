@@ -1,5 +1,7 @@
 import { Client } from "discord-rpc";
 
+import { t } from "../../strings";
+
 import { config } from "./config";
 
 // internal state
@@ -17,12 +19,12 @@ export async function initDiscordRpc() {
     rpc.on("ready", () =>
       rpc.setActivity({
         state: "stoat.chat",
-        details: "Chatting with others",
+        details: t("discord.details"),
         largeImageKey: "qr",
-        largeImageText: "Join Stoat!",
+        largeImageText: t("discord.join"),
         buttons: [
           {
-            label: "Join Stoat",
+            label: t("discord.join_button"),
             url: "https://stoat.chat/",
           },
         ],

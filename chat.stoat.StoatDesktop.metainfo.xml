@@ -7,6 +7,7 @@
     <name>Revolt Platforms Ltd</name>
   </developer>
   <summary>Open source, user-first chat platform</summary>
+  <summary xml:lang="ja">オープンソースでユーザーファーストなチャットプラットフォーム</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>AGPL-3.0</project_license>
   <icon type="remote" height="256" width="256">
@@ -15,10 +16,12 @@
     <p>Stoat is an open source, user-first chat platform. Send messages, share
       images, mention users, and join voice channels — all from a native desktop
       application.</p>
+    <p xml:lang="ja">Stoat は、オープンソースでユーザーファーストなチャットプラットフォームです。ネイティブのデスクトップアプリから、メッセージの送信、画像の共有、ユーザーへのメンション、ボイスチャンネルへの参加ができます。</p>
   </description>
   <screenshots>
     <screenshot type="default">
       <caption>Main window</caption>
+      <caption xml:lang="ja">メインウィンドウ</caption>
       <image>https://raw.githubusercontent.com/stoatchat/for-desktop/b57faa2c59865fea15a879c9a9304271067d0020/screenshot.png</image>
     </screenshot>
   </screenshots>
@@ -26,26 +29,38 @@
     <release date="2026-02-14" version="1.2.0">
       <description>
         <p>Features:</p>
+        <p xml:lang="ja">機能:</p>
         <ul>
           <li>New Branding</li>
+          <li xml:lang="ja">新しいブランド表現</li>
           <li>Persist and restore window size and position</li>
+          <li xml:lang="ja">ウィンドウのサイズと位置を保存して復元</li>
         </ul>
         <p>Bug Fixes:</p>
+        <p xml:lang="ja">バグ修正:</p>
         <ul>
           <li>App Autostart</li>
+          <li xml:lang="ja">アプリの自動起動</li>
         </ul>
       </description>
     </release>
     <release date="2025-12-29" version="1.1.12">
       <description>
         <p>Bug fixes:</p>
+        <p xml:lang="ja">バグ修正:</p>
         <ul>
           <li>Add NixOS compatibility for electron startup</li>
+          <li xml:lang="ja">Electron 起動時の NixOS 互換性を追加</li>
           <li>Correctly load badge count; expose to renderer</li>
+          <li xml:lang="ja">バッジ数を正しく読み込み、レンダラーへ公開</li>
           <li>Fix event listener accumulation from rpc client</li>
+          <li xml:lang="ja">RPC クライアント由来のイベントリスナー蓄積を修正</li>
           <li>Fix macOS tray icon size</li>
+          <li xml:lang="ja">macOS のトレイアイコンサイズを修正</li>
           <li>Fix RPC largeImageText</li>
+          <li xml:lang="ja">RPC の largeImageText を修正</li>
           <li>Use the correct argument for auto start</li>
+          <li xml:lang="ja">自動起動に正しい引数を使用</li>
         </ul>
       </description>
     </release>

@@ -12,6 +12,7 @@ import {
 } from "electron";
 
 import windowIconAsset from "../../assets/desktop/icon.png?asset";
+import { t } from "../../strings";
 
 import { config } from "./config";
 import { updateTrayMenu } from "./tray";
@@ -164,7 +165,7 @@ export function createMainWindow() {
     if (params.misspelledWord) {
       menu.append(
         new MenuItem({
-          label: "Add to dictionary",
+          label: t("spellcheck.add_to_dictionary"),
           click: () =>
             mainWindow.webContents.session.addWordToSpellCheckerDictionary(
               params.misspelledWord,
@@ -176,7 +177,7 @@ export function createMainWindow() {
     // add an option to toggle spellchecker
     menu.append(
       new MenuItem({
-        label: "Toggle spellcheck",
+        label: t("spellcheck.toggle"),
         click() {
           config.spellchecker = !config.spellchecker;
         },

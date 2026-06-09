@@ -3,6 +3,7 @@ import { Menu, Tray, nativeImage } from "electron";
 import trayIconAsset from "../../assets/desktop/icon.png?asset";
 import macOsTrayIconAsset from "../../assets/desktop/iconTemplate.png?asset";
 import { version } from "../../package.json";
+import { t } from "../../strings";
 
 import { mainWindow, quitApp } from "./window";
 
@@ -25,14 +26,14 @@ export function initTray() {
   const trayIcon = createTrayIcon();
   tray = new Tray(trayIcon);
   updateTrayMenu();
-  tray.setToolTip("Stoat for Desktop");
+  tray.setToolTip(t("app.name.desktop"));
   tray.setImage(trayIcon);
   tray.on("click", () => {
     if (mainWindow.isVisible()) {
-     mainWindow.hide();
+      mainWindow.hide();
     } else {
-     mainWindow.show();
-     mainWindow.focus();
+      mainWindow.show();
+      mainWindow.focus();
     }
   });
 }
@@ -40,9 +41,9 @@ export function initTray() {
 export function updateTrayMenu() {
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: "Stoat for Desktop", type: "normal", enabled: false },
+      { label: t("app.name.desktop"), type: "normal", enabled: false },
       {
-        label: "Version",
+        label: t("version"),
         type: "submenu",
         submenu: Menu.buildFromTemplate([
           {
@@ -54,7 +55,7 @@ export function updateTrayMenu() {
       },
       { type: "separator" },
       {
-        label: mainWindow.isVisible() ? "Hide App" : "Show App",
+        label: mainWindow.isVisible() ? t("app.hide") : t("app.show"),
         type: "normal",
         click() {
           if (mainWindow.isVisible()) {
@@ -65,7 +66,7 @@ export function updateTrayMenu() {
         },
       },
       {
-        label: "Quit App",
+        label: t("app.quit"),
         type: "normal",
         click: quitApp,
       },

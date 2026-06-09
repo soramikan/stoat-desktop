@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Stoat
+Name[ja]=Stoat
 Comment=Open source, user-first chat platform
+Comment[ja]=オープンソースでユーザーファーストなチャットプラットフォーム
 Exec=stoat-desktop
 Terminal=false
 Type=Application
