@@ -16,6 +16,14 @@ contextBridge.exposeInMainWorld("native", {
 
   setBadgeCount: (count: number) => ipcRenderer.send("setBadgeCount", count),
 
+  pushNotifications: {
+    isSupported: () => process.platform === "darwin",
+    registerForAPNSNotifications: () =>
+      ipcRenderer.invoke("registerForAPNSNotifications") as Promise<string>,
+    unregisterForAPNSNotifications: () =>
+      ipcRenderer.invoke("unregisterForAPNSNotifications") as Promise<void>,
+  },
+
   onceScreenPicker: (
     onScreenPick: (
       sources: {

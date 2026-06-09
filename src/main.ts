@@ -8,6 +8,7 @@ import { setLocale, t } from "../strings";
 import { autoLaunch } from "./native/autoLaunch";
 import { config } from "./native/config";
 import { initDiscordRpc } from "./native/discordRpc";
+import { initPushNotifications } from "./native/pushNotifications";
 import { initTray } from "./native/tray";
 import { BUILD_URL, createMainWindow, mainWindow } from "./native/window";
 
@@ -57,6 +58,7 @@ if (acquiredLock) {
 
     initTray();
     initDiscordRpc();
+    initPushNotifications();
 
     // Windows specific fix for notifications
     if (process.platform === "win32") {

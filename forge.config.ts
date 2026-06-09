@@ -20,6 +20,35 @@ const STRINGS = {
 };
 
 const ASSET_DIR = "assets/desktop";
+const MACOS_APP_BUNDLE_ID =
+  process.env.MACOS_APP_BUNDLE_ID ?? "chat.stoat.StoatDesktop";
+const MACOS_ENTITLEMENTS = "build/entitlements.mac.plist";
+const MACOS_ENTITLEMENTS_INHERIT = "build/entitlements.mac.inherit.plist";
+
+const macOSSign =
+  process.env.MACOS_CODESIGN_IDENTITY || process.env.MACOS_PROVISIONING_PROFILE
+    ? {
+        identity: process.env.MACOS_CODESIGN_IDENTITY,
+        hardenedRuntime: true,
+        entitlements: MACOS_ENTITLEMENTS,
+        provisioningProfile: process.env.MACOS_PROVISIONING_PROFILE,
+        optionsForFile: (filePath: string) =>
+          filePath.endsWith(`${STRINGS.name}.app`)
+            ? { entitlements: MACOS_ENTITLEMENTS }
+            : { entitlements: MACOS_ENTITLEMENTS_INHERIT },
+      }
+    : undefined;
+
+const macOSNotarize =
+  process.env.APPLE_ID &&
+  process.env.APPLE_APP_SPECIFIC_PASSWORD &&
+  process.env.APPLE_TEAM_ID
+    ? {
+        appleId: process.env.APPLE_ID,
+        appleIdPassword: process.env.APPLE_APP_SPECIFIC_PASSWORD,
+        teamId: process.env.APPLE_TEAM_ID,
+      }
+    : undefined;
 
 /**
  * Build targets for the desktop app
@@ -125,8 +154,14 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     name: STRINGS.name,
+    appBundleId: MACOS_APP_BUNDLE_ID,
     executableName: STRINGS.execName,
     icon: `${ASSET_DIR}/icon`,
+    extendInfo: {
+      NSUserNotificationAlertStyle: "alert",
+    },
+    osxSign: macOSSign,
+    osxNotarize: macOSSign ? macOSNotarize : undefined,
     // extraResource: [
     //   // include all the asset files
     //   ...globSync(ASSET_DIR + "/**/*"),
