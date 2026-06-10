@@ -46,10 +46,29 @@ const STRINGS = {
 const ASSET_DIR = resolve("assets/desktop");
 const MACOS_ICON = resolve("build/icon.icns");
 const MACOS_DMG_BACKGROUND = resolve("build/dmg-background.png");
+const WINDOWS_ICON = resolve("build/icon.ico");
 const DESKTOP_APP_ID = "dev.mikanbox.stoat.desktop";
 const MACOS_APP_BUNDLE_ID = process.env.MACOS_APP_BUNDLE_ID ?? DESKTOP_APP_ID;
 const MACOS_ENTITLEMENTS = "build/entitlements.mac.plist";
 const MACOS_ENTITLEMENTS_INHERIT = "build/entitlements.mac.inherit.plist";
+
+function getTargetPlatform() {
+  const platformArg = process.argv.find((arg) => arg.startsWith("--platform"));
+  if (platformArg?.includes("=")) return platformArg.split("=")[1];
+
+  const platformArgIndex = process.argv.indexOf("--platform");
+  return platformArgIndex >= 0
+    ? process.argv[platformArgIndex + 1]
+    : process.platform;
+}
+
+const targetPlatform = getTargetPlatform();
+const packagerIcon =
+  targetPlatform === "win32"
+    ? WINDOWS_ICON
+    : targetPlatform === "darwin"
+      ? MACOS_ICON
+      : `${ASSET_DIR}/icon.png`;
 
 const macOSSign =
   process.env.MACOS_CODESIGN_IDENTITY || process.env.MACOS_PROVISIONING_PROFILE
@@ -82,15 +101,17 @@ const macOSNotarize =
  */
 const makers: ForgeConfig["makers"] = [
   new MakerSquirrel({
-    name: STRINGS.name,
+    name: DESKTOP_APP_ID,
+    title: STRINGS.name,
     authors: STRINGS.author,
-    // todo: hoist this
-    iconUrl: `https://stoat.chat/app/assets/icon-DUSNE-Pb.ico`,
+    iconUrl:
+      "https://raw.githubusercontent.com/stoatchat/assets/main/desktop/icon.ico",
     // todo: loadingGif
-    setupIcon: `${ASSET_DIR}/icon.ico`,
+    setupIcon: WINDOWS_ICON,
     description: STRINGS.description,
     exe: `${STRINGS.execName}.exe`,
-    setupExe: `${STRINGS.execName}-setup.exe`,
+    setupExe: `${STRINGS.name}-Setup.exe`,
+    setupMsi: `${STRINGS.name}-Setup.msi`,
     copyright: "Copyright (C) 2025 Revolt Platforms LTD",
   }),
   new MakerDMG({
@@ -114,16 +135,19 @@ const makers: ForgeConfig["makers"] = [
   }),
 ];
 
-// skip these makers in CI/CD
-if (!process.env.PLATFORM) {
+if (process.env.MAKE_APPX === "1") {
   makers.push(
-    // must be manually built (freezes CI process)
-    // not much use in being published anyhow
     new MakerAppX({
       certPass: "",
       packageExecutable: `app\\${STRINGS.execName}.exe`,
       publisher: "CN=B040CC7E-0016-4AF5-957F-F8977A6CFA3B",
     }),
+  );
+}
+
+// skip these makers in CI/CD
+if (!process.env.PLATFORM) {
+  makers.push(
     // flatpak publishing should occur through flathub repos.
     // this is just for testing purposes
     new MakerFlatpak({
@@ -201,7 +225,7 @@ const config: ForgeConfig = {
     name: STRINGS.name,
     appBundleId: MACOS_APP_BUNDLE_ID,
     executableName: STRINGS.execName,
-    icon: MACOS_ICON,
+    icon: packagerIcon,
     extendInfo: {
       NSUserNotificationAlertStyle: "alert",
     },
