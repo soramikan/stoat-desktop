@@ -45,6 +45,7 @@ const STRINGS = {
 
 const ASSET_DIR = resolve("assets/desktop");
 const MACOS_ICON = resolve("build/icon.icns");
+const MACOS_DMG_BACKGROUND = resolve("build/dmg-background.png");
 const DESKTOP_APP_ID = "dev.mikanbox.stoat.desktop";
 const MACOS_APP_BUNDLE_ID = process.env.MACOS_APP_BUNDLE_ID ?? DESKTOP_APP_ID;
 const MACOS_ENTITLEMENTS = "build/entitlements.mac.plist";
@@ -93,6 +94,7 @@ const makers: ForgeConfig["makers"] = [
     copyright: "Copyright (C) 2025 Revolt Platforms LTD",
   }),
   new MakerDMG({
+    background: MACOS_DMG_BACKGROUND,
     icon: MACOS_ICON,
     iconSize: 96,
     format: "ULFO",
@@ -104,8 +106,8 @@ const makers: ForgeConfig["makers"] = [
       "background-color": "#1b1b22",
       window: {
         size: {
-          width: 640,
-          height: 400,
+          width: 658,
+          height: 498,
         },
       },
     },
