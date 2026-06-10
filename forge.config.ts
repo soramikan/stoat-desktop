@@ -20,8 +20,8 @@ const STRINGS = {
 };
 
 const ASSET_DIR = "assets/desktop";
-const MACOS_APP_BUNDLE_ID =
-  process.env.MACOS_APP_BUNDLE_ID ?? "chat.stoat.StoatDesktop";
+const DESKTOP_APP_ID = "dev.mikanbox.stoat.desktop";
+const MACOS_APP_BUNDLE_ID = process.env.MACOS_APP_BUNDLE_ID ?? DESKTOP_APP_ID;
 const MACOS_ENTITLEMENTS = "build/entitlements.mac.plist";
 const MACOS_ENTITLEMENTS_INHERIT = "build/entitlements.mac.inherit.plist";
 
@@ -83,7 +83,7 @@ if (!process.env.PLATFORM) {
     // this is just for testing purposes
     new MakerFlatpak({
       options: {
-        id: "chat.stoat.stoat-desktop",
+        id: DESKTOP_APP_ID,
         description: STRINGS.description,
         productName: STRINGS.name,
         productDescription: STRINGS.description,
@@ -133,7 +133,7 @@ if (!process.env.PLATFORM) {
           "--talk-name=com.canonical.Unity",
           "--env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons",
           "--env=ELECTRON_TRASH=gio",
-          "--env=TMPDIR=xdg-run/app/chat.stoat.stoat-desktop",
+          `--env=TMPDIR=xdg-run/app/${DESKTOP_APP_ID}`,
         ],
         files: [],
       } as MakerFlatpakOptionsConfig,
