@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron-forge start -- --no-sandbox",
     "package": "electron-forge package",
-    "premake": "node scripts/rebuild-dmg-native.cjs",
+    "premake": "node scripts/prepare-makers.cjs",
     "make": "electron-forge make",
     "make:windows": "electron-forge make --platform win32 --arch x64 --targets @electron-forge/maker-squirrel",
     "publish": "electron-forge publish",
