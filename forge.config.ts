@@ -53,6 +53,7 @@ const macOSSign =
   process.env.MACOS_CODESIGN_IDENTITY || process.env.MACOS_PROVISIONING_PROFILE
     ? {
         identity: process.env.MACOS_CODESIGN_IDENTITY,
+        continueOnError: false,
         hardenedRuntime: true,
         entitlements: MACOS_ENTITLEMENTS,
         provisioningProfile: process.env.MACOS_PROVISIONING_PROFILE,
