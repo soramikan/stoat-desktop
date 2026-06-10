@@ -1,9 +1,9 @@
 import { MakerAppX } from "@electron-forge/maker-appx";
 import { MakerDeb } from "@electron-forge/maker-deb";
+import { MakerDMG } from "@electron-forge/maker-dmg";
 import { MakerFlatpak } from "@electron-forge/maker-flatpak";
 import { MakerFlatpakOptionsConfig } from "@electron-forge/maker-flatpak/dist/Config";
 import { MakerSquirrel } from "@electron-forge/maker-squirrel";
-import { MakerZIP } from "@electron-forge/maker-zip";
 import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import { PublisherGithub } from "@electron-forge/publisher-github";
@@ -43,7 +43,8 @@ const STRINGS = {
   description: "Open source user-first chat platform.",
 };
 
-const ASSET_DIR = "assets/desktop";
+const ASSET_DIR = resolve("assets/desktop");
+const MACOS_ICON = resolve("build/icon.icns");
 const DESKTOP_APP_ID = "dev.mikanbox.stoat.desktop";
 const MACOS_APP_BUNDLE_ID = process.env.MACOS_APP_BUNDLE_ID ?? DESKTOP_APP_ID;
 const MACOS_ENTITLEMENTS = "build/entitlements.mac.plist";
@@ -91,7 +92,24 @@ const makers: ForgeConfig["makers"] = [
     setupExe: `${STRINGS.execName}-setup.exe`,
     copyright: "Copyright (C) 2025 Revolt Platforms LTD",
   }),
-  new MakerZIP({}),
+  new MakerDMG({
+    icon: MACOS_ICON,
+    iconSize: 96,
+    format: "ULFO",
+    contents: (options) => [
+      { x: 176, y: 170, type: "file", path: options.appPath },
+      { x: 472, y: 170, type: "link", path: "/Applications" },
+    ],
+    additionalDMGOptions: {
+      "background-color": "#1b1b22",
+      window: {
+        size: {
+          width: 640,
+          height: 400,
+        },
+      },
+    },
+  }),
 ];
 
 // skip these makers in CI/CD
@@ -181,7 +199,7 @@ const config: ForgeConfig = {
     name: STRINGS.name,
     appBundleId: MACOS_APP_BUNDLE_ID,
     executableName: STRINGS.execName,
-    icon: `${ASSET_DIR}/icon`,
+    icon: MACOS_ICON,
     extendInfo: {
       NSUserNotificationAlertStyle: "alert",
     },

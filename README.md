@@ -47,7 +47,7 @@ pnpm i --frozen-lockfile
 pnpm start
 # ... or build the bundle
 pnpm package
-# ... or build all distributables
+# ... or build all distributables (DMG installer on macOS)
 pnpm make
 ```
 
