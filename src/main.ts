@@ -19,6 +19,8 @@ if (started) {
   app.quit();
 }
 
+app.setName("Stoat");
+
 // disable hw-accel if so requested
 if (!config.hardwareAcceleration) {
   app.disableHardwareAcceleration();

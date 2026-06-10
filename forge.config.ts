@@ -227,6 +227,8 @@ const config: ForgeConfig = {
     executableName: STRINGS.execName,
     icon: packagerIcon,
     extendInfo: {
+      CFBundleDisplayName: STRINGS.name,
+      CFBundleName: STRINGS.name,
       NSUserNotificationAlertStyle: "alert",
     },
     osxSign: macOSSign,
