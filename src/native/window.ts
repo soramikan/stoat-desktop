@@ -87,7 +87,16 @@ export function createMainWindow() {
   }
 
   // load the entrypoint
-  mainWindow.loadURL(BUILD_URL.toString());
+  const loadEntrypoint = () => mainWindow.loadURL(BUILD_URL.toString());
+  mainWindow.webContents.session
+    .clearStorageData({
+      origin: BUILD_URL.origin,
+      storages: ["serviceworkers", "cachestorage"],
+    })
+    .then(loadEntrypoint, (error) => {
+      console.warn("Failed to clear web service worker storage:", error);
+      loadEntrypoint();
+    });
 
   // minimise window to tray
   mainWindow.on("close", (event) => {
