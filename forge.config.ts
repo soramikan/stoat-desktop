@@ -9,8 +9,8 @@ import { VitePlugin } from "@electron-forge/plugin-vite";
 import { PublisherGithub } from "@electron-forge/publisher-github";
 import type { ForgeConfig } from "@electron-forge/shared-types";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { copyFileSync, existsSync, readFileSync } from "node:fs";
+import { delimiter, dirname, join, resolve } from "node:path";
 
 // import { globSync } from "node:fs";
 
@@ -63,6 +63,60 @@ function getTargetPlatform() {
 }
 
 const targetPlatform = getTargetPlatform();
+
+function getTargetArch() {
+  const archArg = process.argv.find((arg) => arg.startsWith("--arch"));
+  if (archArg?.includes("=")) return archArg.split("=")[1];
+
+  const archArgIndex = process.argv.indexOf("--arch");
+  return archArgIndex >= 0
+    ? process.argv[archArgIndex + 1]
+    : (process.env.npm_config_arch ?? process.arch);
+}
+
+function prepareSquirrelVendor() {
+  if (targetPlatform !== "win32") return undefined;
+
+  let vendorDir;
+
+  try {
+    vendorDir = join(
+      dirname(require.resolve("electron-winstaller/package.json")),
+      "vendor",
+    );
+  } catch {
+    console.warn(
+      "Skipping Squirrel vendor preparation: electron-winstaller is not installed.",
+    );
+    return undefined;
+  }
+
+  const targetArch = getTargetArch() === "arm64" ? "arm64" : "x64";
+  const files = [
+    [`7z-${targetArch}.exe`, "7z.exe"],
+    [`7z-${targetArch}.dll`, "7z.dll"],
+  ];
+
+  for (const [sourceName, targetName] of files) {
+    const source = join(vendorDir, sourceName);
+    const target = join(vendorDir, targetName);
+
+    if (!existsSync(source)) {
+      throw new Error(
+        `Missing electron-winstaller vendor file: ${source}. Reinstall dependencies and approve electron-winstaller build scripts.`,
+      );
+    }
+
+    copyFileSync(source, target);
+  }
+
+  process.env.PATH = [vendorDir, process.env.PATH]
+    .filter(Boolean)
+    .join(delimiter);
+  return vendorDir;
+}
+
+const squirrelVendorDirectory = prepareSquirrelVendor();
 const packagerIcon =
   targetPlatform === "win32"
     ? WINDOWS_ICON
@@ -104,6 +158,9 @@ const makers: ForgeConfig["makers"] = [
     name: DESKTOP_APP_ID,
     title: STRINGS.name,
     authors: STRINGS.author,
+    ...(squirrelVendorDirectory
+      ? { vendorDirectory: squirrelVendorDirectory }
+      : {}),
     iconUrl:
       "https://raw.githubusercontent.com/stoatchat/assets/main/desktop/icon.ico",
     // todo: loadingGif

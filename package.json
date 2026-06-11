@@ -9,6 +9,7 @@
     "package": "electron-forge package",
     "premake": "node scripts/prepare-makers.cjs",
     "make": "electron-forge make",
+    "premake:windows": "node scripts/prepare-makers.cjs",
     "make:windows": "electron-forge make --platform win32 --arch x64 --targets @electron-forge/maker-squirrel",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
